@@ -1,0 +1,29 @@
+# ERROR storm detection criteria
+# 1. Lines grouped by service; analyzed independently, sorted by the
+#    timestamp printed on each line (local machine clock, no clock
+#    correction); timestamp ties keep original file order.
+# 2. Trigger: 60s sliding window [t-60s, t] anchored at every ERROR line;
+#    >=5 ERROR lines in any window marks all ERRORs inside it as core
+#    errors; first core error starts a storm.
+# 3. End: consecutive ERROR lines of the service more than 30s apart
+#    split the run (30s gap tolerance for edge/lull errors).
+# 4. Storm interval = first..last ERROR of the cluster, including
+#    non-core ERRORs within 30s of a cluster edge.
+# 5. error_lines = ERROR lines in [start,end]; total_lines = all lines
+#    (INFO/WARN/ERROR) of that service in [start,end].
+# 6. Duration = end_time - start_time, whole seconds.
+# 7. Services with no triggered storm appear in the summary with
+#    0 storms and longest duration "-".
+#
+service	start_time	end_time	duration_s	error_lines	total_lines
+billing	2026-03-12T10:20:46	2026-03-12T10:35:40	894	193	223
+billing	2026-03-12T13:05:46	2026-03-12T13:25:40	1194	244	277
+checkout	2026-03-12T09:00:08	2026-03-12T09:13:22	794	155	173
+checkout	2026-03-12T11:39:47	2026-03-12T11:58:06	1099	222	264
+gateway	2026-03-12T13:50:03	2026-03-12T14:03:19	796	142	168
+ingest	2026-03-12T10:50:18	2026-03-12T11:03:41	803	160	175
+notify	2026-03-12T12:29:38	2026-03-12T12:34:33	295	58	58
+notify	2026-03-12T12:35:05	2026-03-12T12:43:28	503	93	111
+search	2026-03-12T09:00:16	2026-03-12T09:14:33	857	152	181
+search	2026-03-12T14:29:55	2026-03-12T14:41:10	675	123	149
+search	2026-03-12T14:41:45	2026-03-12T14:45:37	232	52	59

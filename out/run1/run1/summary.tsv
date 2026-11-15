@@ -1,0 +1,30 @@
+# ERROR storm detection criteria
+# 1. Lines grouped by service; analyzed independently, sorted by the
+#    timestamp printed on each line (local machine clock, no clock
+#    correction); timestamp ties keep original file order.
+# 2. Trigger: 60s sliding window [t-60s, t] anchored at every ERROR line;
+#    >=5 ERROR lines in any window marks all ERRORs inside it as core
+#    errors; first core error starts a storm.
+# 3. End: consecutive ERROR lines of the service more than 30s apart
+#    split the run (30s gap tolerance for edge/lull errors).
+# 4. Storm interval = first..last ERROR of the cluster, including
+#    non-core ERRORs within 30s of a cluster edge.
+# 5. error_lines = ERROR lines in [start,end]; total_lines = all lines
+#    (INFO/WARN/ERROR) of that service in [start,end].
+# 6. Duration = end_time - start_time, whole seconds.
+# 7. Services with no triggered storm appear in the summary with
+#    0 storms and longest duration "-".
+#
+service	storm_count	longest_duration_s
+auth-api	0	-
+billing	2	1194
+cache-sync	0	-
+checkout	2	1099
+fraud-check	0	-
+gateway	1	796
+ingest	1	803
+media-encode	0	-
+notify	2	503
+reporting	0	-
+scheduler	0	-
+search	3	857
